@@ -1,20 +1,12 @@
 import './App.css';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import TodoForm from './TodoForm';
+import TodoList from './TodoList';
 
 export default function App() 
 {
-
-  const [newItem, setNewItem] = useState('');
   const [todos, setTodos] = useState([]);
-
-  function addTodos(newItem, e) {
-    e.preventDefault();
-    setTodos( (prevTodos) => {
-      return [...prevTodos, { id: Math.random(), title: newItem, completed: false } ]
-    })
-    setNewItem('');
-  };
 
   function editTodos(todo, completed) {
     setTodos( (prevTodos) => {
@@ -36,26 +28,11 @@ export default function App()
 
   return (
     <>
-      <form onSubmit={ (e) => {addTodos(newItem, e)}}>
-        <label htmlFor="name">New Item</label>
-        <input id="name" type="text" value = {newItem} onChange={ (e) => setNewItem(e.target.value)}/>
-        <button type="submit">Add</button>
-      </form>
+      <TodoForm setTodos={setTodos} />
 
       <h1>Todo List</h1>
 
-      <ul>
-        {todos.map( todo => {
-            return (
-              <li key={todo.id}>
-                <input type="checkbox" checked={todo.completed} onChange={ (e) => {editTodos(todo, e.target.checked)} }/>
-                <span>{todo.title}</span>
-                <button onClick={ () => {deleteTodos(todo)}}>Delete</button>
-              </li>
-            )
-          })
-        }
-      </ul>
+      <TodoList todos={todos} editTodos={editTodos} deleteTodos={deleteTodos}/>
     </>
   );
 }
